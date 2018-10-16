@@ -1,11 +1,12 @@
 # Mercari Euro Hack - Team McTerminal
 
 ## Idea:
+Our idea is to create a carpooling application that automatically matches people with optimal ridesharing opportunities.
 
 ## Technology stack:
 
 ### Backend:
-- Python3 - Django with django rest framework
+- Python3 - Django with django rest framework and Celery distributed task queue
 - Sqlite database
 
 ### Web app:
