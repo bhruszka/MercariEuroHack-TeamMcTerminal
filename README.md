@@ -1,7 +1,7 @@
 # Mercari Euro Hack - Team McTerminal
 
 ## Idea:
-Our idea is to create a carpooling application that automatically matches people with optimal ridesharing opportunitie.
+Our idea is to create a carpooling application that automatically matches people with optimal ridesharing opportunity.
 
 ## Technology stack:
 
