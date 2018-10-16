@@ -6,9 +6,11 @@ Our idea is to create a carpooling application that automatically matches people
 ## Technology stack:
 
 ### Backend:
-- Python3 - Django with django rest framework and Celery distributed task queue
-- Sqlite database
+- Python3 - Django with Graphene django and Celery distributed task queue
+- Docker
+- Postgresql
 
 ### Web app:
 - Vuejs with Vuetify component library
+- Apollo
 - Leaflet map library with mapbox tile layer
