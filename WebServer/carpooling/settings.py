@@ -34,7 +34,7 @@ ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     'core',
-    'matcher',
+    'carpool_matcher',
     'corsheaders',
     'django_extensions',
     'django_celery_results',
