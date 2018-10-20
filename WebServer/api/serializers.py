@@ -20,11 +20,11 @@ class LoginSerializer(serializers.Serializer):
 
 
 class FacebokLoginSerializer(serializers.Serializer):
-    access_token = serializers.CharField()
-    user_id = serializers.CharField()
+    token = serializers.CharField()
+    userId = serializers.CharField()
 
     class Meta:
-        fields = ('access_token', 'user_id')
+        fields = ('token', 'userId')
 
 
 class CreateUserSerializer(serializers.ModelSerializer):

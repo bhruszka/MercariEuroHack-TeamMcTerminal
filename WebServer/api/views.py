@@ -1,3 +1,5 @@
+import json
+
 import requests
 from django.conf import settings
 from django.contrib.auth import login, logout, get_user_model
@@ -58,16 +60,28 @@ class LoginFacebookView(CreateAPIView):
     permission_classes = (AllowAny,)
     serializer_class = FacebokLoginSerializer
 
-    def get(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
-            request_url = 'https://graph.facebook.com/me/?access_token={}&client_id={}&client_secret={}&grant_type={}'.format(
-                serializer.validated_data['access_token'],
+            request_url = 'https://graph.facebook.com/me/?access_token={}&client_id={}&client_secret={}&grant_type=client_credentials&fields=id,name,email'.format(
+                serializer.validated_data['token'],
                 settings.SOCIAL_AUTH_FACEBOOK_KEY,
-                settings.SOCIAL_AUTH_FACEBOOK_SECRET,
-                'id,kupa'
+                settings.SOCIAL_AUTH_FACEBOOK_SECRET
             )
-            response = requests.get(request_url)
+            response = json.loads(requests.get(request_url).text)
+            if response['id'] != serializer.validated_data['userId']:
+                return Response(status=status.HTTP_400_BAD_REQUEST, data='Bad userId')
+            try:
+                user = get_user_model().objects.get(facebook_id=serializer.validated_data['userId'])
+            except get_user_model().DoesNotExist:
+                user = get_user_model().objects.create(first_name=response['name'].split(' ')[0],
+                                                       last_name=response['name'].split(' ')[1],
+                                                       email=response['email'],
+                                                       username=response['email'],
+                                                       facebook_id=serializer.validated_data['userId'])
+            user.facebook_token = serializer.validated_data['token']
+            user.save()
+            return Response(status=status.HTTP_200_OK)
         return Response(status=status.HTTP_400_BAD_REQUEST, data='BŁAD')
 
 
@@ -126,6 +140,7 @@ class RouteViewSet(ModelViewSet):
     serializer_class = RouteSerializer
     # filter_backends = (DjangoFilterBackend,)
     pagination_class = None
+
     # filter_class = RouteFilter
 
     def get_queryset(self):
