@@ -2,25 +2,21 @@
   <v-app>
     <v-toolbar app>
       <v-toolbar-title class="headline text-uppercase">
-        <span>Vuetify</span>
-        <span class="font-weight-light">MATERIAL DESIGN</span>
+        <span class="font-weight-light">CARPOOL APP</span>
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn flat @click-native="facebookLogout">
-        <span class="mr-2">Latest Release</span>
-        <v-icon>open_in_new</v-icon>
-      </v-btn>
+      <span>
+        User: {{user}}
+      </span>
     </v-toolbar>
 
     <v-content>
       <!-- <Auth :user="user" /> -->
       <div v-if="user != null">
-        User: {{user}}
         <SelectRole v-if="role == null" v-on:set-role="role = $event" />
-        <h1 v-else>Role: {{role}} </h1>
-        <DriverForm v-if="role == 'driver'"/>
-        <PassangerForm v-if="role == 'passanger'"/>
-        <WaitForRide />
+        <DriverForm v-if="role == 'driver'" />
+        <PassengerForm v-if="role == 'passenger'" />
+        <WaitForRide v-if="userData != null" />
       </div>
     </v-content>
   </v-app>
@@ -30,7 +26,7 @@
 import Auth from "./components/Auth";
 import SelectRole from "./components/SelectRole";
 import DriverForm from "./components/DriverForm";
-import PassangerForm from "./components/PassangerForm";
+import PassengerForm from "./components/PassangerForm";
 import WaitForRide from "./components/WaitForRide";
 
 export default {
@@ -39,13 +35,14 @@ export default {
     Auth,
     SelectRole,
     DriverForm,
-    PassangerForm,
+    PassengerForm,
     WaitForRide
   },
   data() {
     return {
       user: null,
-      role: null
+      role: null,
+      userData: null,
       //
     };
   },
@@ -59,9 +56,9 @@ export default {
         xfbml: true,
         version: "v3.1"
       });
-      console.log("test")
+      console.log("test");
       FB.getLoginStatus(function(response) {
-        console.log("getLoginStatus")
+        console.log("getLoginStatus");
         self.authStatusChangeCallback(response);
       });
     };
@@ -85,7 +82,7 @@ export default {
         function(response) {
           console.log(response);
           if (response.status == "connected") {
-            console.log(response)
+            console.log(response);
             self.user = response.authResponse.userID;
           }
         },

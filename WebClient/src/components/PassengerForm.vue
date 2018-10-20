@@ -1,10 +1,9 @@
 <template>
     <div>
-        <h1>PassangerForm</h1>
+        <h1>Passenger</h1>
+        <Map />
     </div>
 </template>
 <script>
-export default {
-    
-}
+export default {};
 </script>
