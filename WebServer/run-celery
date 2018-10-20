@@ -1,0 +1,3 @@
+#!/bin/bash
+
+celery -A carpool-service worker -l info --app=carpooling.celery:app

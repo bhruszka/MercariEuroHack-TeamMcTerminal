@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+import sys
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
@@ -131,7 +133,39 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 
-GOOGLE_MAPS_API_KEY = 'AIzaSyBeVcPqSMmWp3Q5AgqJ4HE0Mfs-IrTQi0M'
+GOOGLE_MAPS_API_KEY = 'AIzaSyDRA2zHDqfH8LuK7miSlUDhC5VUC3ju8as'
+
+APP_LOG_SETUP = {
+    'handlers': ['console'],
+    'level': 'DEBUG',
+    'propagate': True,
+}
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
+        },
+        'simple': {
+            'format': '%(levelname)s %(message)s'
+        },
+    },
+    'handlers': {
+        'console':{
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple'
+        },
+    },
+    'loggers': {
+        'matcher': APP_LOG_SETUP,
+        'api': APP_LOG_SETUP,
+        'carpooling': APP_LOG_SETUP,
+        'core': APP_LOG_SETUP,
+    },
+}
 
 try:
     from local_settings import *
