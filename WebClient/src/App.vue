@@ -13,11 +13,13 @@
 
       <v-content>
         <!-- <Auth :user="user" /> -->
-        <Auth />
+        <!-- <Auth /> -->
+        <v-btn v-if="user == null" :disabled="!facebookInit" @click.native="facebookLogin"> Log in with Facebook </v-btn>
+        <v-btn v-else @click.native="facebookLogout"> Log out </v-btn>
         <div v-if="user != null">
           <SelectRole v-if="role == null" v-on:set-role="role = $event" />
-          <DriverForm v-if="role == 'driver'" @cancel="role = null"/>
-          <PassengerForm v-if="role == 'passenger'" @cancel="role = null"/>
+          <DriverForm v-if="role == 'driver'" @cancel="role = null" />
+          <PassengerForm v-if="role == 'passenger'" @cancel="role = null" />
           <WaitForRide v-if="userData != null" />
         </div>
       </v-content>
@@ -45,7 +47,8 @@ export default {
     return {
       user: null,
       role: null,
-      userData: null
+      userData: null,
+      facebookInit: false
       //
     };
   },
@@ -59,9 +62,7 @@ export default {
         xfbml: true,
         version: "v3.1"
       });
-      console.log("test");
       FB.getLoginStatus(function(response) {
-        console.log("getLoginStatus");
         self.authStatusChangeCallback(response);
       });
     };
@@ -80,13 +81,25 @@ export default {
   },
   methods: {
     authStatusChangeCallback(response) {
+      this.facebookInit = true;
+      if (response.status == "connected") {
+        this.user = {};
+        this.user.userId = response.authResponse.userID;
+        this.user.token = response.authResponse.accessToken;
+      } else {
+        this.facebookLogin();
+      }
+    },
+    facebookLogin() {
+      this.user = null;
       var self = this;
       FB.login(
         function(response) {
-          console.log(response);
+          // console.log(response);
           if (response.status == "connected") {
-            console.log(response);
-            self.user = response.authResponse.userID;
+            self.user = {};
+            self.user.userId = response.authResponse.userID;
+            self.user.token = response.authResponse.accessToken;
           }
         },
         { scope: "public_profile,email" }
@@ -96,6 +109,7 @@ export default {
       var self = this;
       FB.logout(function(response) {
         self.user = null;
+        window.location.reload();
       });
     }
   }

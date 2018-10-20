@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-btn> Log in with Facebook </v-btn>
-    <v-form ref="form" v-model="valid" lazy-validation>
+    <!-- <v-form ref="form" v-model="valid" lazy-validation>
       <v-alert :value="errorText != null" type="error">
         {{errorText}}
       </v-alert>
@@ -16,7 +16,7 @@
       <v-text-field v-model="email" :rules="emailRules" label="E-mail" required></v-text-field>
       <v-text-field v-model="password" :rules="passwordRules" :counter="8" label="Password" type="password" required></v-text-field>
       <v-btn :disabled="!valid" @click="signIn">{{toggleMode == 0 ? "log in" : "sign up"}}</v-btn>
-    </v-form>
+    </v-form> -->
   </div>
 </template>
 <script>
@@ -53,7 +53,7 @@ export default {
 
         axios
           .request({
-            url: `https://carpooling.com.pl:4242/api/${
+            url: `http://carpooling.com.pl:8000/api/${
               this.toggleMode == 0 ? "login" : "sign-in"
             }/`,
             method: "post",
