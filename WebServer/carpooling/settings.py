@@ -174,7 +174,7 @@ LOGGING = {
 }
 
 CORS_ORIGIN_WHITELIST = (
-    'localhost',
+    'localhost:8080',
     'carpooling.com.pl',
     'carpooling.com.pl:4242',
 )
