@@ -17,7 +17,7 @@
           <v-layout row wrap>
             <v-flex xs12 v-if="user == null" fill-height>
               <v-card>
-                <img src="./assets/background.jpg"/>
+                <img src="./assets/background.jpg" style="width: 100%;"/>
                 
                 <v-card-title primary-title>
                   <div class="headline">To start carpooling sign in with Facebook</div>
@@ -138,7 +138,7 @@ export default {
     },
     serverLogin() {
       axios
-        .post("https://carpooling.com.pl:4242/login-facebook", {
+        .post("https://carpooling.com.pl:4242/api/login-facebook/", {
           userId: this.user.userId,
           token: this.user.token
           // headers: {
