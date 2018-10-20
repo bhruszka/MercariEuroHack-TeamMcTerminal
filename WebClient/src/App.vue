@@ -138,7 +138,7 @@ export default {
     },
     serverLogin() {
       axios
-        .post("https://carpooling.com.pl:4242/api/login-facebook", {
+        .post("https://carpooling.com.pl:4242/api/login-facebook/", {
           userId: this.user.userId,
           token: this.user.token
           // headers: {
