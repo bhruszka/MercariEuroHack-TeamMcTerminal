@@ -1,6 +1,7 @@
 import requests
 from django.conf import settings
 from django.contrib.auth import login, logout, get_user_model
+from django.db.models import Case, When, Value, CharField, Q
 from django.http import HttpResponse, HttpRequest
 from django.shortcuts import render
 
@@ -9,12 +10,16 @@ from django.shortcuts import render
 
 # Login ApiView
 from rest_framework import status
+from rest_framework.decorators import list_route
 from rest_framework.generics import CreateAPIView, RetrieveAPIView
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
-from api.serializers import LoginSerializer, CreateUserSerializer, UserSerializer, FacebokLoginSerializer
+from api.serializers import LoginSerializer, CreateUserSerializer, UserSerializer, FacebokLoginSerializer, \
+    RouteSerializer
+from matcher.models import Route
+from matcher.utils import get_polyline_from_path
 
 app_name = 'api'
 
@@ -63,7 +68,8 @@ class LoginFacebookView(CreateAPIView):
                 'id,kupa'
             )
             response = requests.get(request_url)
-        return Response(status=status.HTTP_400_BAD_REQUEST,data='BŁAD')
+        return Response(status=status.HTTP_400_BAD_REQUEST, data='BŁAD')
+
 
 class CreateUser(CreateAPIView):
     serializer_class = CreateUserSerializer
@@ -90,3 +96,79 @@ class UserViewSet(ModelViewSet):
 
     def get_object(self):
         return self.get_queryset().get(id=self.request.user.id)
+
+
+# class RouteFilter(filters.FilterSet):
+#     type = filters.CharFilter(name='type', method='filter_type')
+#
+#     class Meta:
+#         model = Route
+#         fields = {
+#         }
+#
+#     def filter_type(self, qs, name, value):
+#         lookup_expr = ''
+#         if value == 'passenger':
+#             lookup_expr = "driver__user"
+#         if value == 'driver':
+#             lookup_expr = "passenger__user"
+#         if lookup_expr == '':
+#             return qs
+#         return qs.exclude(**{lookup_expr: self.request.user})
+
+
+class RouteViewSet(ModelViewSet):
+    """
+    type - either 'driver' or 'passenger' for query and for post
+
+    start_point and end_point are of format {"longitude": "","latitude":""}
+    """
+    serializer_class = RouteSerializer
+    # filter_backends = (DjangoFilterBackend,)
+    pagination_class = None
+    # filter_class = RouteFilter
+
+    def get_queryset(self):
+        value = self.request.query_params.get('value')
+        qs = Route.objects.all()
+        lookup_expr = ''
+        if value == 'passenger':
+            lookup_expr = "driver__user"
+        if value == 'driver':
+            lookup_expr = "passenger__user"
+        if lookup_expr != '':
+            qs.exclude(**{lookup_expr: self.request.user})
+        return qs.annotate(
+            type=Case(When(Q(driver__isnull=False), then=Value('driver')), output_field=CharField(),
+                      default=Value('passenger'))).filter(
+            (
+                    (
+                            Q(passenger__isnull=False) and Q(passenger__user=self.request.user)
+                    ) |
+                    (
+                            Q(driver__isnull=False) and Q(driver__user=self.request.user)
+                    )
+            )
+        )
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset().first()
+        serializer = self.get_serializer(queryset)
+        return Response(serializer.data)
+
+    @list_route(methods=['GET'])
+    def path(self, request, *args, **kwargs):
+        if request.user.drivers.all().count():
+            return Response({"poly_line": get_polyline_from_path(request.user.drivers.first().path)},
+                            status=status.HTTP_200_OK)
+        if request.user.passengers.all().count():
+            return Response({"poly_line": get_polyline_from_path(request.user.passengers.first().path)},
+                            status=status.HTTP_200_OK)
+        return Response({"poly_line": None}, status=status.HTTP_200_OK)
+
+    @list_route(methods=['GET'])
+    def passengers(self, request, *args, **kwargs):
+        if request.user.drivers.all().count() > 0:
+            return Response(request.user.drivers.first().passengers.all().values_list('user__username', flat=True),
+                            status=status.HTTP_200_OK)
+        return Response([], status=status.HTTP_200_OK)
