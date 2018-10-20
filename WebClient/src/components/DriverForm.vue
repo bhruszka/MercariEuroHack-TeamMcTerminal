@@ -1,8 +1,10 @@
 <template>
-    <div>
-        <h1>Driver</h1>
-        <Map />
-    </div>
+  <div>
+    <h1>Driver</h1>
+    <Map v-on:set-startpoint="startPoint = $event" v-on:set-destination="destination = $event" />
+    <v-btn>Submit</v-btn>
+    <v-btn @click.native="$emit('cancel')">Cancel</v-btn>
+  </div>
 </template>
 <script>
 import Map from "./Map";

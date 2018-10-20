@@ -1,12 +1,27 @@
 <template>
-    <div>
-        <h1>Auth</h1>
-        <fb-signin-button :params="fbSignInParams" @success="onSignInSuccess" @error="onSignInError">
-            Sign in with Facebook
-        </fb-signin-button>
-    </div>
+  <div>
+    <v-btn> Log in with Facebook </v-btn>
+    <v-form ref="form" v-model="valid" lazy-validation>
+      <v-alert :value="errorText != null" type="error">
+        {{errorText}}
+      </v-alert>
+      <v-btn-toggle v-model="toggleMode" mandatory>
+        <v-btn flat>
+          Log in
+        </v-btn>
+        <v-btn flat>
+          Sign up
+        </v-btn>
+      </v-btn-toggle>
+      <v-text-field v-model="email" :rules="emailRules" label="E-mail" required></v-text-field>
+      <v-text-field v-model="password" :rules="passwordRules" :counter="8" label="Password" type="password" required></v-text-field>
+      <v-btn :disabled="!valid" @click="signIn">{{toggleMode == 0 ? "log in" : "sign up"}}</v-btn>
+    </v-form>
+  </div>
 </template>
 <script>
+import axios from "axios";
+
 export default {
   props: ["user"],
   data() {
@@ -15,21 +30,68 @@ export default {
         scope: "email",
         return_scopes: true
       },
-      myuser: null
+      myuser: null,
+      valid: false,
+      password: "",
+      passwordRules: [
+        v => !!v || "Password is required",
+        v => (v && v.length >= 8) || "Password must be at least 8 characters"
+      ],
+      email: "",
+      emailRules: [
+        v => !!v || "E-mail is required",
+        v => /.+@.+/.test(v) || "E-mail must be valid"
+      ],
+      errorText: null,
+      toggleMode: 0
     };
   },
   methods: {
-    onSignInSuccess(response) {
-      var self = this;
-      FB.api("/me", user => {
-        self.myuser = user;
-        console.log(user);
-        console.log(`Good to see you, ${user.name}.`);
-      });
+    signIn() {
+      if (this.$refs.form.validate()) {
+        // Native form submission is not yet supported
+        var self = this;
+        axios
+          .post(
+            `https://carpooling.com.pl:4242/api/${
+              this.toggleMode == 0 ? "login" : "sign-in"
+            }/`,
+            {
+              headers: {
+                "Access-Control-Allow-Origin": "*"
+              },
+              email: this.email,
+              username: this.email,
+              password: this.password
+            }
+          )
+          .then(function(response) {
+            console.log(response);
+            self.errorText = null;
+          })
+          .catch(function(error) {
+            self.errorText = error.message;
+          });
+      }
     },
-    onSignInError(error) {
-      this.user = null;
-      console.log("OH NOES", error);
+    authStatusChangeCallback(response) {
+      var self = this;
+      FB.login(
+        function(response) {
+          console.log(response);
+          if (response.status == "connected") {
+            console.log(response);
+            self.user = response.authResponse.userID;
+          }
+        },
+        { scope: "public_profile,email" }
+      );
+    },
+    facebookLogout() {
+      var self = this;
+      FB.logout(function(response) {
+        self.user = null;
+      });
     }
   }
 };

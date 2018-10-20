@@ -9,16 +9,19 @@
         User: {{user}}
       </span>
     </v-toolbar>
+    <v-container>
 
-    <v-content>
-      <!-- <Auth :user="user" /> -->
-      <div v-if="user != null">
-        <SelectRole v-if="role == null" v-on:set-role="role = $event" />
-        <DriverForm v-if="role == 'driver'" />
-        <PassengerForm v-if="role == 'passenger'" />
-        <WaitForRide v-if="userData != null" />
-      </div>
-    </v-content>
+      <v-content>
+        <!-- <Auth :user="user" /> -->
+        <Auth />
+        <div v-if="user != null">
+          <SelectRole v-if="role == null" v-on:set-role="role = $event" />
+          <DriverForm v-if="role == 'driver'" @cancel="role = null"/>
+          <PassengerForm v-if="role == 'passenger'" @cancel="role = null"/>
+          <WaitForRide v-if="userData != null" />
+        </div>
+      </v-content>
+    </v-container>
   </v-app>
 </template>
 
@@ -26,7 +29,7 @@
 import Auth from "./components/Auth";
 import SelectRole from "./components/SelectRole";
 import DriverForm from "./components/DriverForm";
-import PassengerForm from "./components/PassangerForm";
+import PassengerForm from "./components/PassengerForm";
 import WaitForRide from "./components/WaitForRide";
 
 export default {
@@ -42,7 +45,7 @@ export default {
     return {
       user: null,
       role: null,
-      userData: null,
+      userData: null
       //
     };
   },
