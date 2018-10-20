@@ -6,7 +6,7 @@ from django.conf import settings
 
 @app.task
 def calculate_distances(location_id):
-    from matcher.models import Location, Distance
+    from carpool_matcher.models import Location, Distance
 
     location = Location.objects.get(pk=location_id)
 

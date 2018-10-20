@@ -20,8 +20,8 @@ from rest_framework.viewsets import ModelViewSet
 
 from api.serializers import LoginSerializer, CreateUserSerializer, UserSerializer, FacebokLoginSerializer, \
     RouteSerializer
-from matcher.models import Route
-from matcher.utils import get_polyline_from_path
+from carpool_matcher.models import Route
+from carpool_matcher.utils import get_polyline_from_path
 
 app_name = 'api'
 

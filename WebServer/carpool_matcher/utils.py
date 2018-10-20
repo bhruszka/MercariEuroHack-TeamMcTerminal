@@ -2,7 +2,7 @@ from googlemaps.directions import directions
 import googlemaps
 from django.conf import settings
 from django.core.management.base import BaseCommand, CommandError
-from matcher.models import Location, DistanceCache, Distance, DistanceCache, Passenger, Driver
+from carpool_matcher.models import Location, DistanceCache, Distance, DistanceCache, Passenger, Driver
 import random
 
 

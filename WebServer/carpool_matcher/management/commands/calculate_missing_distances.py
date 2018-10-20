@@ -6,8 +6,8 @@ logger = logging.getLogger(__name__)
 
 class Command(BaseCommand):
     def handle(self, *args, **kwargs):
-        from matcher.jobs import calculate_distances
-        from matcher.models import Location
+        from carpool_matcher.jobs import calculate_distances
+        from carpool_matcher.models import Location
 
         uncalculated_locations = Location.objects.filter(all_distances_calculated=False)
 

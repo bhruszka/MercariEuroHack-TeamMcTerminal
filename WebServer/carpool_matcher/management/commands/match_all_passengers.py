@@ -2,7 +2,7 @@ import logging
 
 from django.core.management import BaseCommand
 
-from matcher.utils import match_all_passengers
+from carpool_matcher.utils import match_all_passengers
 
 
 class Command(BaseCommand):

@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model, authenticate
 from rest_framework import serializers
 
-from matcher.models import Location, Route, Driver, Passenger
+from carpool_matcher.models import Location, Route, Driver, Passenger
 
 
 class LoginSerializer(serializers.Serializer):

@@ -170,7 +170,7 @@ LOGGING = {
         },
     },
     'loggers': {
-        'matcher': APP_LOG_SETUP,
+        'carpool_matcher': APP_LOG_SETUP,
         'api': APP_LOG_SETUP,
         'carpooling': APP_LOG_SETUP,
         'core': APP_LOG_SETUP,
