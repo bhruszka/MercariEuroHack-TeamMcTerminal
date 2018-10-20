@@ -10,6 +10,9 @@
   "dependencies": {
     "@babel/polyfill": "^7.0.0-rc.1",
     "vue": "^2.5.17",
+    "vue-facebook-signin-button": "^1.0.1",
+    "vue-google-maps": "^0.1.21",
+    "vue2-google-maps": "^0.10.2",
     "vuetify": "^1.3.0"
   },
   "devDependencies": {
