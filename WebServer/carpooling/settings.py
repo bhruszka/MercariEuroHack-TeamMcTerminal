@@ -35,12 +35,15 @@ INSTALLED_APPS = [
     'matcher',
     'django_extensions',
     'django_celery_results',
+    'api',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'rest_framework_swagger',
 ]
 
 MIDDLEWARE = [
@@ -109,7 +112,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
 
@@ -123,10 +125,15 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
 
+
 GOOGLE_MAPS_API_KEY = 'AIzaSyBeVcPqSMmWp3Q5AgqJ4HE0Mfs-IrTQi0M'
+
+try:
+    from local_settings import *
+except ImportError:
+    pass
