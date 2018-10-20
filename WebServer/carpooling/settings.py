@@ -173,6 +173,12 @@ LOGGING = {
     },
 }
 
+CORS_ORIGIN_WHITELIST = (
+    'localhost',
+    'carpooling.com.pl',
+    'carpooling.com.pl:4242',
+)
+
 try:
     from local_settings import *
 except ImportError:
