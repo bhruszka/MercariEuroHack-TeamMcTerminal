@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_swagger',
     'factory',
+    'PIL'
 ]
 
 MIDDLEWARE = [
@@ -182,6 +183,10 @@ CORS_ORIGIN_ALLOW_ALL = True
 SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
 
 APPEND_SLASH = False
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 
 try:
     from local_settings import *
