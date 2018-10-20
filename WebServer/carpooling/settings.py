@@ -51,6 +51,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
+    # 'api.middleware.UserCookieMiddleWare',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -176,6 +177,8 @@ LOGGING = {
 }
 
 CORS_ORIGIN_ALLOW_ALL = True
+
+SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
 
 try:
     from local_settings import *
