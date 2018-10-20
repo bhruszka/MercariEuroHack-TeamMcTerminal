@@ -49,22 +49,24 @@ export default {
   methods: {
     signIn() {
       if (this.$refs.form.validate()) {
-        // Native form submission is not yet supported
         var self = this;
+
         axios
-          .post(
-            `https://carpooling.com.pl:4242/api/${
+          .request({
+            url: `https://carpooling.com.pl:4242/api/${
               this.toggleMode == 0 ? "login" : "sign-in"
             }/`,
-            {
-              headers: {
-                "Access-Control-Allow-Origin": "*"
-              },
+            method: "post",
+            // headers: {
+            //   "Access-Control-Allow-Origin": "*"
+            // },
+            // withCredentials: true,
+            data: {
               email: this.email,
               username: this.email,
               password: this.password
             }
-          )
+          })
           .then(function(response) {
             console.log(response);
             self.errorText = null;
