@@ -55,10 +55,11 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'api.middleware.AuthMiddleware',
 ]
 
 ROOT_URLCONF = 'carpooling.urls'
@@ -179,6 +180,8 @@ LOGGING = {
 CORS_ORIGIN_ALLOW_ALL = True
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
+
+APPEND_SLASH = False
 
 try:
     from local_settings import *
