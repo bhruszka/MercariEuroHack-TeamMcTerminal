@@ -30,7 +30,9 @@ class LoginApiView(CreateAPIView):
             user = serializer.login()
             if user:
                 login(request, user)
-                return Response(status.HTTP_202_ACCEPTED)
+                res = Response(status.HTTP_202_ACCEPTED)
+                res.set_cookie('sessionid', request.session.session_key)
+                return res
             else:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         else:
