@@ -17,6 +17,14 @@ class LoginSerializer(serializers.Serializer):
         return user
 
 
+class FacebokLoginSerializer(serializers.Serializer):
+    access_token = serializers.CharField()
+    user_id = serializers.CharField()
+
+    class Meta:
+        fields = ('access_token', 'user_id')
+
+
 class CreateUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()
@@ -51,6 +59,3 @@ class UserSerializer(serializers.ModelSerializer):
     def validate(self, attrs):
         # TODO: Password validation
         return attrs
-
-
-

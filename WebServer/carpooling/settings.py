@@ -132,6 +132,21 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ),
+    'DATETIME_FORMAT': "%Y-%m-%d %H:%M",
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 20
+}
+
+SOCIAL_AUTH_FACEBOOK_KEY = '162998601309144'
+SOCIAL_AUTH_FACEBOOK_SECRET = '99ef1ca192ab57fb5a467742eb0589c9'
 
 GOOGLE_MAPS_API_KEY = 'AIzaSyDRA2zHDqfH8LuK7miSlUDhC5VUC3ju8as'
 

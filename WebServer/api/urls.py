@@ -13,6 +13,7 @@ app_name = 'api'
 urlpatterns = [
     url('^api/', include([
         url(r'^login/$', views.LoginApiView.as_view(), name='login'),
+        url(r'^login-facebook/$', views.LoginFacebookView.as_view(), name='login-facebook'),
         url(r'^logout/$', views.LogoutApiView.as_view(), name='logout'),
         url(r'^sign-in/$', views.CreateUser.as_view(), name='sign-in'),
         url(r'^', include(user_router.urls)),
