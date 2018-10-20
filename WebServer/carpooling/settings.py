@@ -35,6 +35,7 @@ ALLOWED_HOSTS = ['*']
 INSTALLED_APPS = [
     'core',
     'matcher',
+    'corsheaders',
     'django_extensions',
     'django_celery_results',
     'api',
@@ -49,6 +50,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -173,11 +175,7 @@ LOGGING = {
     },
 }
 
-CORS_ORIGIN_WHITELIST = (
-    'localhost:8080',
-    'carpooling.com.pl',
-    'carpooling.com.pl:4242',
-)
+CORS_ORIGIN_ALLOW_ALL = True
 
 try:
     from local_settings import *
