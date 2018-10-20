@@ -35,6 +35,7 @@ ALLOWED_HOSTS = ['*']
 INSTALLED_APPS = [
     'core',
     'matcher',
+    'corsheaders',
     'django_extensions',
     'django_celery_results',
     'api',
@@ -46,9 +47,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework_swagger',
+    'factory',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -101,16 +104,7 @@ CELERY_BROKER_URL = 'redis://localhost'
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
 
@@ -132,6 +126,21 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ),
+    'DATETIME_FORMAT': "%Y-%m-%d %H:%M",
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 20
+}
+
+SOCIAL_AUTH_FACEBOOK_KEY = '162998601309144'
+SOCIAL_AUTH_FACEBOOK_SECRET = '99ef1ca192ab57fb5a467742eb0589c9'
 
 GOOGLE_MAPS_API_KEY = 'AIzaSyDRA2zHDqfH8LuK7miSlUDhC5VUC3ju8as'
 
@@ -166,6 +175,10 @@ LOGGING = {
         'core': APP_LOG_SETUP,
     },
 }
+
+CORS_ORIGIN_ALLOW_ALL = True
+
+SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
 
 try:
     from local_settings import *
