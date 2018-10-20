@@ -8,6 +8,8 @@ router = routers.DefaultRouter()
 user_router = routers.DefaultRouter()
 user_router.register(r'^user', views.UserViewSet, base_name='administrator-designers')
 
+route_router = routers.DefaultRouter()
+route_router .register(r'^routes', views.RouteViewSet, base_name='routes')
 
 app_name = 'api'
 urlpatterns = [
@@ -17,6 +19,7 @@ urlpatterns = [
         url(r'^logout/$', views.LogoutApiView.as_view(), name='logout'),
         url(r'^sign-in/$', views.CreateUser.as_view(), name='sign-in'),
         url(r'^', include(user_router.urls)),
+        url(r'^', include(route_router.urls)),
     ]))
 ]
 
