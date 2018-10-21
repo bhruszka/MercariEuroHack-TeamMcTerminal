@@ -257,9 +257,10 @@ class RouteViewSet(ModelViewSet):
                             status=status.HTTP_200_OK)
         if request.user.passengers.all().count():
             path = request.user.passengers.first().path
-            return Response({"full_path": get_polyline_from_path(path),
-                             'path': [{'lat': float(point.latitude), 'lng': float(point.longitude)} for point in path]},
-                            status=status.HTTP_200_OK)
+            if path:
+                return Response({"full_path": get_polyline_from_path(path),
+                                 'path': [{'lat': float(point.latitude), 'lng': float(point.longitude)} for point in path]},
+                                status=status.HTTP_200_OK)
         return Response({"poly_line": None}, status=status.HTTP_200_OK)
 
     @list_route(methods=['GET'])
