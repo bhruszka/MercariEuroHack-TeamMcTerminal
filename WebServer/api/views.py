@@ -242,6 +242,12 @@ class RouteViewSet(ModelViewSet):
         return Response(serializer.data)
 
     @list_route(methods=['GET'])
+    def clear_my_path(self, request, *args, **kwargs):
+        request.user.drivers.delete()
+        request.user.passengers.delete()
+        return Response(status=status.HTTP_200_OK)
+
+    @list_route(methods=['GET'])
     def path(self, request, *args, **kwargs):
         if request.user.drivers.all().count():
             path = request.user.drivers.first().path
