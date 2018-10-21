@@ -36,7 +36,7 @@
         </div>
         <div v-else>
           <v-btn @click.native="submitRoute">Submit Route</v-btn>
-          <v-btn @click.native="cancel">Cancel</v-btn>
+          <v-btn @click.native="addRoute=false">Cancel</v-btn>
         </div>
       </div>
       <div v-else style="height: 100%">
@@ -136,6 +136,7 @@ export default {
       });
     },
     serverLogin() {
+      var self = this;
       axios
         .post("https://carpooling.com.pl:4242/api/login-facebook/", {
           userId: this.user.userId,
@@ -154,6 +155,7 @@ export default {
         });
     },
     submitRoute() {
+      var self = this;
       axios
         .post("https://carpooling.com.pl:4242/api/routes/", {
           userId: this.user.userId,
@@ -171,6 +173,7 @@ export default {
         });
     },
     getMyRoutes() {
+      var self = this;
       axios
         .get("https://carpooling.com.pl:4242/api/routes/", {
           userId: this.user.userId,
@@ -178,6 +181,8 @@ export default {
         })
         .then(function(response) {
           console.log(response);
+          self.addRoute = false;
+          self.getMyRoutes();
           self.errorText = null;
         })
         .catch(function(error) {
