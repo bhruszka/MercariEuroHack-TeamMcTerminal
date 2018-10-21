@@ -207,6 +207,13 @@ class RouteViewSet(ModelViewSet):
         return Response(serializer.data)
 
     @list_route(methods=['GET'])
+    def all_routes(self, request, *args, **kwargs):
+        queryset = Route.objects.all()
+        serializer = self.get_serializer(queryset)
+        return Response(serializer.data)
+
+
+    @list_route(methods=['GET'])
     def path(self, request, *args, **kwargs):
         if request.user.drivers.all().count():
             return Response({"poly_line": get_polyline_from_path(request.user.drivers.first().path)},
