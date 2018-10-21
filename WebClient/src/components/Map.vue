@@ -10,7 +10,7 @@
         <v-btn @click.native="$emit('submit')" class="button-map button-map-first">Submit</v-btn>
         <v-btn @click.native="$emit('cancel')" class="button-map">Cancel</v-btn>
       </div>
-      <GmapMap :center="center" :zoom="7" class="my-map" :options="options">
+      <GmapMap :center="center" :zoom="8" class="my-map" :options="options">
         <GmapMarker v-if="startPoint" :position="startPoint" :clickable="true" />
         <GmapMarker v-if="destination" :position="destination" :clickable="true" />
       </GmapMap>
@@ -24,7 +24,7 @@ export default {
     return {
       startPoint: null,
       destination: null,
-      center: { lat: 55, lng: 54 },
+      center: { lat: 52.2297, lng: 21.0122 },
       options: {
         disableDefaultUI: true
       }
@@ -108,6 +108,6 @@ export default {
   -moz-box-sizing: border-box;
   box-sizing: border-box;
   width: 100%;
-  z-index: 0;
+  z-index: 6;
 }
 </style>

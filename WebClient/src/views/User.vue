@@ -1,6 +1,6 @@
 <template>
   <div style="height: 100%">
-    <v-toolbar height="64px">
+    <v-toolbar height="64px" style="z-index: 5">
       <v-toolbar-title class="headline text-uppercase">
         <span class="font-weight-light">CARPOOL APP</span>
       </v-toolbar-title>
@@ -39,8 +39,13 @@
           <v-btn @click.native="addRoute=false">Cancel</v-btn>
         </div>
       </div>
-      <div v-else style="height: 100%">
-        <v-btn @click.native="addRoute = true">Add Route</v-btn>
+      <div v-else style="height: 100%; display: flex">
+        <v-flex xs6>
+          <v-btn @click.native="addRoute = true">Add Route</v-btn>
+        </v-flex>
+        <v-flex xs6>
+          <PolyMap :path="path"/>
+        </v-flex>
       </div>
     </div>
   </div>
@@ -51,6 +56,8 @@ import SelectRole from "../components/SelectRole";
 import DriverForm from "../components/DriverForm";
 import PassengerForm from "../components/PassengerForm";
 import WaitForRide from "../components/WaitForRide";
+import PolyMap from "../components/PolyMap";
+
 import axios from "axios";
 
 export default {
@@ -60,7 +67,8 @@ export default {
     SelectRole,
     DriverForm,
     PassengerForm,
-    WaitForRide
+    WaitForRide,
+    PolyMap
   },
   data() {
     return {
@@ -71,7 +79,8 @@ export default {
       errorText: null,
       route: null,
       addRoute: false,
-      existingRoutes: []
+      existingRoutes: [],
+      path: null
       //
     };
   },
@@ -167,6 +176,7 @@ export default {
         .then(function(response) {
           console.log(response);
           self.errorText = null;
+          self.getMyRoutes();
         })
         .catch(function(error) {
           self.errorText = error.message;
@@ -175,14 +185,15 @@ export default {
     getMyRoutes() {
       var self = this;
       axios
-        .get("https://carpooling.com.pl:4242/api/routes/", {
-          userId: this.user.userId,
-          token: this.user.token
-        })
+        .get(
+          `https://carpooling.com.pl:4242/api/routes/?userId=${
+            this.user.userId
+          }&token=${this.user.token}`
+        )
         .then(function(response) {
+          self.path = response.data.path;
           console.log(response);
           self.addRoute = false;
-          self.getMyRoutes();
           self.errorText = null;
         })
         .catch(function(error) {
