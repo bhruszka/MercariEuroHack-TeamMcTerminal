@@ -69,15 +69,23 @@ class LocationSerializer(serializers.ModelSerializer):
         fields = ('id', 'longitude', 'latitude')
 
 
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = get_user_model()
+        fields = ('id', 'avatar', 'first_name')
+
+
 class RouteSerializer(serializers.ModelSerializer):
     start_point = LocationSerializer()
     end_point = LocationSerializer()
     path = serializers.SerializerMethodField()
+    users = serializers.SerializerMethodField()
     type = serializers.CharField(required=False)
 
     class Meta:
         model = Route
-        fields = ('id', 'start_point', 'end_point', 'type', 'path')
+        fields = ('id', 'start_point', 'end_point', 'type', 'path','users')
+
 
     def get_path(self, obj):
         if hasattr(obj, 'type'):
@@ -85,6 +93,14 @@ class RouteSerializer(serializers.ModelSerializer):
                 return LocationSerializer(obj.driver.path, many=True).data
             if obj.type == 'passenger':
                 return LocationSerializer(obj.passenger.path, many=True).data
+        return None
+
+    def get_users(self, obj):
+        if hasattr(obj, 'type'):
+            if obj.type == 'driver':
+                return UserSerializer(obj.driver.path_users, many=True).data
+            if obj.type == 'passenger':
+                return UserSerializer(obj.passenger.path_users, many=True).data
         return None
 
     def create(self, validated_data):

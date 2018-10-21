@@ -45,7 +45,7 @@
           <v-btn @click.native="addRoute = true" class="ma-0" style="width: 100%" color="red">Add Route</v-btn>
         </v-flex>
         <v-flex xs9>
-          <PolyMap :path="path" :full_path="full_path" />
+          <PolyMap :path="path" :full_path="full_path" :users="users" />
         </v-flex>
       </div>
     </div>
@@ -82,7 +82,8 @@ export default {
       addRoute: false,
       existingRoutes: [],
       path: null,
-      full_path: null
+      full_path: null,
+      users: []
       //
     };
   },
@@ -220,6 +221,7 @@ export default {
         .then(function(response) {
           self.full_path = response.data.full_path;
           self.path = response.data.path;
+          self.users = response.data.users;
           console.log(response);
           self.addRoute = false;
           self.errorText = null;
