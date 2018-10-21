@@ -97,7 +97,6 @@ MAX_VALUE = 9999999999
 
 def match_all_passengers():
     logger = logging.getLogger(__name__)
-    logger.info('START passenger matching.')
 
     if not Location.all_distances_calculated:
         raise CommandError('Not all distances calculated.')
