@@ -222,21 +222,11 @@ class RouteViewSet(ModelViewSet):
     def path(self, request, *args, **kwargs):
         if request.user.drivers.all().count():
             path = request.user.drivers.first().path
-            return Response({"poly_line": [{'lat': point.latitude, 'lng': point.longitude} for point in path]},
+            return Response({"full_path": get_polyline_from_path(path), 'path': [{'lat': point.latitude, 'lng': point.longitude} for point in path]},
                             status=status.HTTP_200_OK)
         if request.user.passengers.all().count():
             path = request.user.passengers.first().path
-            return Response({"poly_line": [{'lat': point.latitude, 'lng': point.longitude} for point in path]},
-                            status=status.HTTP_200_OK)
-        return Response({"poly_line": None}, status=status.HTTP_200_OK)
-
-    @list_route(methods=['GET'])
-    def full_path(self, request, *args, **kwargs):
-        if request.user.drivers.all().count():
-            return Response({"poly_line": get_polyline_from_path(request.user.drivers.first().path)},
-                            status=status.HTTP_200_OK)
-        if request.user.passengers.all().count():
-            return Response({"poly_line": get_polyline_from_path(request.user.passengers.first().path)},
+            return Response({"full_path": get_polyline_from_path(path), 'path': [{'lat': point.latitude, 'lng': point.longitude} for point in path]},
                             status=status.HTTP_200_OK)
         return Response({"poly_line": None}, status=status.HTTP_200_OK)
 
