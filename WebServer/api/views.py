@@ -219,7 +219,7 @@ class RouteViewSet(ModelViewSet):
         return Response(serializer.data)
 
     @permission_classes((AllowAny,))
-    @authentication_classes()
+    @authentication_classes((AllowAny,))
     @list_route(methods=['GET'])
     def all_routes_path(self, request, *args, **kwargs):
         drivers = Driver.objects.all()
