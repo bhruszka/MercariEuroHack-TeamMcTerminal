@@ -55,7 +55,7 @@ class Command(BaseCommand):
             'rSuiu_Hr.jpg'
         ]
 
-        users = UserFactory.create_batch(size=12)
+        users = UserFactory.create_batch(size=31)
         for user in users:
             user.set_password('test')
             image_name = avatars.pop()
