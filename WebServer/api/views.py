@@ -189,7 +189,7 @@ class RouteViewSetNoAuth(CreateAPIView):
                 },
                 'full_path': get_polyline_from_path(driver.path),
                 'path': [{'lat': float(point.latitude), 'lng': float(point.longitude)} for point in driver.path],
-                'users': [{'first_name':user.first_name, 'avatar': user.avatar.url} for user in driver.path_users]
+                'users': [{'first_name':user.first_name, 'avatar': user.avatar.url if user.avatar else ''} for user in driver.path_users]
             })
 
         return Response(result, status=status.HTTP_200_OK)
