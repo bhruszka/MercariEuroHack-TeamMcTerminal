@@ -25,6 +25,16 @@ class AuthMiddleware:
                 login(request, user)
             except get_user_model().DoesNotExist:
                 pass
+        elif request.GET and request.GET.get('userId'):
+            facebook_id = request.GET.get('userId')
+
+            try:
+                user = get_user_model().objects.get(facebook_id=facebook_id)
+                user.backend = 'django.contrib.auth.backends.ModelBackend'
+                login(request, user)
+            except get_user_model().DoesNotExist:
+                pass
+
 
         response = self.get_response(request)
 
