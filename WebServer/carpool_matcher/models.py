@@ -134,7 +134,10 @@ class Passenger(CommonModel):
     @property
     def path(self):
         if not self.driver:
-            return []
+            route = self.routes.first()
+            start_point = route.start_point
+            end_point = route.end_point
+            return [start_point, end_point]
         driver_path = self.driver.path
 
         route = self.routes.first()
