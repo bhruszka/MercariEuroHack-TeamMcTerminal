@@ -127,6 +127,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
@@ -144,7 +146,7 @@ REST_FRAMEWORK = {
 SOCIAL_AUTH_FACEBOOK_KEY = '162998601309144'
 SOCIAL_AUTH_FACEBOOK_SECRET = '99ef1ca192ab57fb5a467742eb0589c9'
 
-GOOGLE_MAPS_API_KEY = 'AIzaSyDRA2zHDqfH8LuK7miSlUDhC5VUC3ju8as'
+GOOGLE_MAPS_API_KEY = 'AIzaSyCl_WlLRERaswq6m_6tB6RW_mtWbHhCOSg'
 
 APP_LOG_SETUP = {
     'handlers': ['console'],
@@ -181,8 +183,6 @@ LOGGING = {
 CORS_ORIGIN_ALLOW_ALL = True
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
-
-APPEND_SLASH = False
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
