@@ -10,7 +10,7 @@
         <v-btn @click.native="$emit('submit')" class="button-map button-map-first">Submit</v-btn>
         <v-btn @click.native="$emit('cancel')" class="button-map">Cancel</v-btn>
       </div>
-      <GmapMap :center="center" :zoom="8" class="my-map" :options="options">
+      <GmapMap :center="center" :zoom="12" class="my-map" :options="options">
         <GmapMarker v-if="startPoint" :position="startPoint" :clickable="true" />
         <GmapMarker v-if="destination" :position="destination" :clickable="true" />
       </GmapMap>
