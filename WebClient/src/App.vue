@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-toolbar app>
+    <v-toolbar height="64px">
       <v-toolbar-title class="headline text-uppercase">
         <span class="font-weight-light">CARPOOL APP</span>
       </v-toolbar-title>
@@ -11,40 +11,55 @@
       </span>
     </v-toolbar>
     <v-container>
-
-      <v-content>
-        <v-container>
-          <v-layout row wrap>
-            <v-flex xs12 v-if="user == null" fill-height>
-              <v-card>
-                <img src="./assets/background.jpg" style="width: 100%;"/>
-                
-                <v-card-title primary-title>
-                  <div class="headline">To start carpooling sign in with Facebook</div>
-                  <!-- <div>Listen to your favorite artists and albums whenever and wherever, online and offline.</div> -->
-                </v-card-title>
-                <v-card-actions>
-                  <v-btn :disabled="!facebookInit" @click.native="facebookLogin"> Sign in with Facebook </v-btn>
-                </v-card-actions>
-              </v-card>
-            </v-flex>
-          </v-layout>
-          <v-alert :value="errorText != null" type="error">
-            {{errorText}}
-          </v-alert>
-        </v-container>
-        <!-- <Auth :user="user" /> -->
-        <!-- <Auth /> -->
-        <v-alert :value="errorText != null" type="error">
-          {{errorText}}
-        </v-alert>
-        <div v-if="user != null">
+      <v-layout row wrap d-flex v-if="user == null">
+        <v-flex xs12>
+          <v-card>
+            <!-- <img src="./assets/background.jpg" style="width: 100%;" /> -->
+            <v-card-title primary-title>
+              <div class="headline">To start carpooling sign in with Facebook</div>
+            </v-card-title>
+            <v-card-actions>
+              <v-btn :disabled="!facebookInit" @click.native="facebookLogin"> Sign in with Facebook </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-flex>
+      </v-layout>
+      <div v-else>
+        <v-layout row wrap d-flex v-else>
           <SelectRole v-if="role == null" v-on:set-role="role = $event" />
-          <DriverForm v-if="role == 'driver'" @cancel="role = null" />
-          <PassengerForm v-if="role == 'passenger'" @cancel="role = null" />
-          <WaitForRide v-if="userData != null" />
-        </div>
-      </v-content>
+          <div v-if="route == null">
+            <DriverForm v-if="role == 'driver'" @cancel="role = null" @submit="route = $event" />
+            <PassengerForm v-if="role == 'passenger'" @cancel="role = null" @submit="route = $event" />
+          </div>
+          <div v-else>
+            <v-btn @click.native="submitRoute">Submit Route</v-btn>
+          </div>
+        </v-layout>
+        <v-layout row wrap d-flex>
+          <v-flex xs12 v-if="user == null">
+            <v-card>
+              <!-- <img src="./assets/background.jpg" style="width: 100%;" /> -->
+
+              <v-card-title primary-title>
+                <div class="headline">To start carpooling sign in with Facebook</div>
+              </v-card-title>
+              <v-card-actions>
+                <v-btn :disabled="!facebookInit" @click.native="facebookLogin"> Sign in with Facebook </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-flex>
+          <div v-else>
+            <SelectRole v-if="role == null" v-on:set-role="role = $event" />
+            <div v-if="route == null">
+              <DriverForm v-if="role == 'driver'" @cancel="role = null" @submit="route = $event" />
+              <PassengerForm v-if="role == 'passenger'" @cancel="role = null" @submit="route = $event" />
+            </div>
+            <div v-else>
+              <v-btn @click.native="submitRoute">Submit Route</v-btn>
+            </div>
+          </div>
+        </v-layout>
+      </div>
     </v-container>
   </v-app>
 </template>
@@ -72,7 +87,8 @@ export default {
       role: null,
       userData: null,
       facebookInit: false,
-      errorText: null
+      errorText: null,
+      route: null
       //
     };
   },
@@ -144,6 +160,23 @@ export default {
           // headers: {
           //   "Access-Control-Allow-Origin": "*"
           // }
+        })
+        .then(function(response) {
+          console.log(response);
+          self.errorText = null;
+        })
+        .catch(function(error) {
+          self.errorText = error.message;
+        });
+    },
+    submitRoute() {
+      axios
+        .post("https://carpooling.com.pl:4242/api/routes/", {
+          userId: this.user.userId,
+          token: this.user.token,
+          end_point: this.route.destination,
+          start_point: this.route.startPoint,
+          type: this.role
         })
         .then(function(response) {
           console.log(response);
