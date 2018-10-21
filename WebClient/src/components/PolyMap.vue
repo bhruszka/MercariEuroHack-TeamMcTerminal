@@ -1,6 +1,6 @@
 <template>
     <GmapMap :center="center" :zoom="12" class="poly-map" :options="options">
-        <gmap-polyline v-if="path != null && path.length > 0" :path="full_path" ref="polyline">
+        <gmap-polyline v-if="path != null && path.length > 0" :path="full_path" ref="polyline" :options="{strokeColor: 'red'}">
         </gmap-polyline>
         <gmap-marker v-for="(m, index) in path" :position="m" :key="index"></gmap-marker>
     </GmapMap>

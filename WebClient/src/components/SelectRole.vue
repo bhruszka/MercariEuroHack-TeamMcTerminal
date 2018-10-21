@@ -16,6 +16,8 @@ export default {};
   width: 100%;
   height: 100%;
   color: white;
+  text-shadow: 2px 2px 2px rgb(125, 125, 125);
+  font-size: 30px;
 }
 .background-dudes {
   background-image: url("https://images.unsplash.com/photo-1537211790624-e6f568af4b13");

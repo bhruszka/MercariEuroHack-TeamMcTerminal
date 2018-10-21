@@ -6,24 +6,24 @@
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn v-if="user != null" @click.native="facebookLogout"> Log out </v-btn>
-      <span v-else>
-        User: {{user}}
-      </span>
     </v-toolbar>
 
     <v-alert :value="errorText != null" type="error">
       {{errorText}}
     </v-alert>
-    <v-layout row wrap d-flex v-if="user == null">
-      <v-flex xs12>
-        <v-card>
+    <v-layout row wrap d-flex v-if="user == null" class="tall">
+      <v-flex xs12 style="height: 100%">
+        <v-card style="height: 100%" class="login-background">
           <!-- <img src="./assets/background.jpg" style="width: 100%;" /> -->
-          <v-card-title primary-title>
-            <div class="headline">To start carpooling sign in with Facebook</div>
-          </v-card-title>
-          <v-card-actions>
-            <v-btn :disabled="!facebookInit" @click.native="facebookLogin"> Sign in with Facebook </v-btn>
-          </v-card-actions>
+          <v-layout column d-flex style="height: 100%">
+            <div style="flex-grow: 10;"></div>
+            <v-card-title primary-title style="flex-grow: 0 !important; margin-left: 11px;">
+              <div class="headline" style="text-shadow: 2px 2px 2px rgb(0, 0, 0);font-size: 40px !important;"><b>Stop driving alone - Start carpooling and battle traffic with us</b></div>
+            </v-card-title>
+            <v-card-actions style="flex-grow: 0 !important; margin-bottom: 150px;  margin-top: 20px; margin-left: 15px;">
+              <v-btn :disabled="!facebookInit" @click.native="facebookLogin" color="blue"> Sign in with Facebook </v-btn>
+            </v-card-actions>
+          </v-layout>
         </v-card>
       </v-flex>
     </v-layout>
@@ -31,20 +31,20 @@
       <div v-if="addRoute" style="height: 100%">
         <SelectRole v-if="role == null" v-on:set-role="role = $event" />
         <div v-if="route == null">
-          <DriverForm v-if="role == 'driver'" @cancel="role = null" @submit="route = $event" />
-          <PassengerForm v-if="role == 'passenger'" @cancel="role = null" @submit="route = $event" />
+          <DriverForm v-if="role == 'driver'" @cancel="role = null" @submit="submitRoute($event)" />
+          <PassengerForm v-if="role == 'passenger'" @cancel="role = null" @submit="submitRoute($event)" />
         </div>
-        <div v-else>
+        <!-- <div v-else>
           <v-btn @click.native="submitRoute">Submit Route</v-btn>
           <v-btn @click.native="addRoute=false">Cancel</v-btn>
-        </div>
+        </div> -->
       </div>
       <div v-else style="height: 100%; display: flex">
-        <v-flex xs6>
-          <v-btn @click.native="addRoute = true">Add Route</v-btn>
+        <v-flex xs3>
+          <v-btn @click.native="addRoute = true" class="ma-0" style="width: 100%" color="red">Add Route</v-btn>
         </v-flex>
-        <v-flex xs6>
-          <PolyMap :path="path" :full_path="full_path"/>
+        <v-flex xs9>
+          <PolyMap :path="path" :full_path="full_path" />
         </v-flex>
       </div>
     </div>
@@ -164,8 +164,29 @@ export default {
           self.errorText = error.message;
         });
     },
-    submitRoute() {
+    submitRoute(event) {
+      this.route = event;
       var self = this;
+
+      axios
+        .get(
+          `https://carpooling.com.pl:4242/api/routes/clear_my_path/?userId=${
+            this.user.userId
+          }&token=${this.user.token}`
+        )
+        .then(function(response) {
+          console.log(response);
+          self.errorText = null;
+          self.submitRoute2(event);
+        })
+        .catch(function(error) {
+          self.errorText = error.message;
+        });
+    },
+    submitRoute2(event) {
+      this.route = event;
+      var self = this;
+
       axios
         .post("https://carpooling.com.pl:4242/api/routes/", {
           userId: this.user.userId,
@@ -182,6 +203,8 @@ export default {
         .catch(function(error) {
           self.errorText = error.message;
         });
+      this.role = null;
+      this.route = null;
     },
     getMyRoutes() {
       var self = this;
@@ -208,5 +231,9 @@ export default {
 <style>
 .tall {
   height: calc(100% - 64px);
+}
+.login-background {
+  background-image: url("https://carpooling.com.pl:4242/static/gangsta.jpg");
+  background-size: cover;
 }
 </style>
