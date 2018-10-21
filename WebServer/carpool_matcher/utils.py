@@ -84,8 +84,9 @@ def modified_dijkstra_search(driver, passengers, distance_cache=None, full=True)
 
 def get_polyline_from_path(path):
     gclient = googlemaps.Client(key=settings.GOOGLE_MAPS_API_KEY)
-    return directions(gclient, path[0].get_location_tuple, path[-1].get_location_tuple,
+    points = directions(gclient, path[0].get_location_tuple, path[-1].get_location_tuple,
                       waypoints=[p.get_location_tuple for p in path[1:-2]])[0]['overview_polyline']['points']
+    return [{'lat': point.latitude, 'lng': point.longitude} for point in points]
 
 
 MAX_VALUE = 9999999999
