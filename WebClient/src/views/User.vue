@@ -6,6 +6,7 @@
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn v-if="user != null" @click.native="facebookLogout"> Log out </v-btn>
+      <img v-if="user != null" class="circle-avatar" :src="'https://carpooling.com.pl:4242'+user.avatar" />
     </v-toolbar>
 
     <v-alert :value="errorText != null" type="error">
@@ -159,6 +160,7 @@ export default {
           console.log(response);
           self.errorText = null;
           self.getMyRoutes();
+          self.getMyProfile();
         })
         .catch(function(error) {
           self.errorText = error.message;
@@ -199,6 +201,7 @@ export default {
           console.log(response);
           self.errorText = null;
           self.getMyRoutes();
+          self.getMyProfile();
         })
         .catch(function(error) {
           self.errorText = error.message;
@@ -224,6 +227,30 @@ export default {
         .catch(function(error) {
           self.errorText = error.message;
         });
+    },
+    getMyProfile() {
+      var self = this;
+      axios
+        .get(
+          `https://carpooling.com.pl:4242/api/user/your_profile/?userId=${
+            this.user.userId
+          }&token=${this.user.token}`
+        )
+        .then(function(response) {
+          self.path = response.data.path;
+          console.log(response);
+          self.user = {
+            ...self.user,
+            avatar: response.data.avatar,
+            first_name: response.data.first_name,
+            last_name: response.data.last_name
+          };
+          self.addRoute = false;
+          self.errorText = null;
+        })
+        .catch(function(error) {
+          self.errorText = error.message;
+        });
     }
   }
 };
@@ -231,6 +258,9 @@ export default {
 <style>
 .tall {
   height: calc(100% - 64px);
+}
+.circle-avatar {
+  border-radius: 25px;
 }
 .login-background {
   background-image: url("https://carpooling.com.pl:4242/static/gangsta.jpg");

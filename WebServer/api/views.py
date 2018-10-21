@@ -142,7 +142,7 @@ class UserViewSet(ModelViewSet):
     serializer_class = UserSerializer
 
     def get_queryset(self):
-        return get_user_model().objects.filter(id=self.request.user.id)
+        return get_user_model().objects.all()
 
     def get_object(self):
         return self.get_queryset().get(id=self.request.user.id)
@@ -240,6 +240,12 @@ class RouteViewSet(ModelViewSet):
                       default=Value('passenger'))).filter(type='driver')
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
+
+    @list_route(methods=['GET'])
+    def clear_my_path(self, request, *args, **kwargs):
+        request.user.drivers.all().delete()
+        request.user.passengers.all().delete()
+        return Response(status=status.HTTP_200_OK)
 
     @list_route(methods=['GET'])
     def path(self, request, *args, **kwargs):

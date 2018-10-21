@@ -90,6 +90,24 @@ class Driver(CommonModel):
     capacity = models.IntegerField(default=4)
 
     @property
+    def path_users(self):
+        path = self.path
+
+        users_path = []
+
+        for point in path:
+            if point._start_routes.count():
+                route = point._start_routes.first()
+            else:
+                route = point._end_routes.first()
+
+            if route.driver:
+                users_path.append(route.driver.user)
+            else:
+                users_path.append(route.passenger.user)
+        return users_path
+
+    @property
     def path(self):
         path = []
 
@@ -122,6 +140,24 @@ class Passenger(CommonModel):
         end_point = route.end_point
 
         return driver_path[driver_path.index(start_point):driver_path.index(end_point)+1]
+
+    @property
+    def path_users(self):
+        path = self.path
+
+        users_path = []
+
+        for point in path:
+            if point._start_routes.count():
+                route = point._start_routes.first()
+            else:
+                route = point._end_routes.first()
+
+            if route.driver:
+                users_path.append(route.driver.user)
+            else:
+                users_path.append(route.passenger.user)
+        return users_path
 
 
 class Route(CommonModel):
