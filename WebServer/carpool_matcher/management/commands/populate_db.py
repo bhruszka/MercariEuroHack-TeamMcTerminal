@@ -20,7 +20,7 @@ class Command(BaseCommand):
         super(Command, self).__init__(*args, **kwargs)
 
     def _make_users(self, options):
-        users = UserFactory.create_batch(size=12)
+        users = UserFactory.create_batch(size=23)
         for user in users:
             user.set_password('test')
             user.save()
@@ -28,10 +28,20 @@ class Command(BaseCommand):
         self.users = users
 
     def _make_routes(self, options):
-        from_points = {
-            'point_1': [52.145362, 21.018677],
-            'point_2': [52.155426, 21.051561]
-        }
+        from_points = [
+            {
+                'point_1': [52.145362, 21.018677],
+                'point_2': [52.155426, 21.051561],
+            },
+            {
+                'point_1': [52.149375, 20.913649],
+                'point_2': [52.157047, 20.956858],
+            },
+            {
+                'point_1': [52.162907, 20.852725],
+                'point_2': [52.180820, 20.898751],
+            },
+        ]
         to_points = {
             'point_1': [52.219624, 20.991787],
             'point_2': [52.232035, 21.024743]
@@ -44,17 +54,19 @@ class Command(BaseCommand):
                 role = 'driver'
             else:
                 role = 'passenger'
+
+            from_point = random.choice(from_points)
             start_latlng = "{}, {}".format(
                 float(
                     random.randrange(
-                        from_points['point_1'][0] * 1000000,
-                        from_points['point_2'][0] * 1000000
+                        from_point['point_1'][0] * 1000000,
+                        from_point['point_2'][0] * 1000000
                     )
                 ) / 1000000,
                 float(
                     random.randrange(
-                        from_points['point_1'][1] * 1000000,
-                        from_points['point_2'][1] * 1000000
+                        from_point['point_1'][1] * 1000000,
+                        from_point['point_2'][1] * 1000000
                     )
                 ) / 1000000
             )
