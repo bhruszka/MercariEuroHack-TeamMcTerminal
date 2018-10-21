@@ -111,6 +111,8 @@ class Driver(CommonModel):
     def path(self):
         path = []
 
+        if self.routes.count() == 0:
+            return path
         d_route = self.routes.first()
         path.append(d_route.start_point)
         path.append(d_route.end_point)

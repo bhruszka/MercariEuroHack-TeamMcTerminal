@@ -110,6 +110,8 @@ def match_all_passengers():
 
     for driver in drivers:
         route = driver.routes.first()
+        if not route:
+            continue
         driver.distance = dc.get_distance(route.start_point, route.end_point)
         driver._passengers = []
         driver._passenger_count = 0

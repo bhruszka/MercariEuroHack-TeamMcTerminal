@@ -189,6 +189,7 @@ class RouteViewSetNoAuth(CreateAPIView):
                 },
                 'full_path': get_polyline_from_path(driver.path),
                 'path': [{'lat': float(point.latitude), 'lng': float(point.longitude)} for point in driver.path],
+                'users': [{'first_name':user.first_name, 'avatar': user.avatar.url} for user in driver.path_users]
             })
 
         return Response(result, status=status.HTTP_200_OK)
@@ -251,11 +252,13 @@ class RouteViewSet(ModelViewSet):
     def path(self, request, *args, **kwargs):
         if request.user.drivers.all().count():
             path = request.user.drivers.first().path
-            return Response({"full_path": get_polyline_from_path(path), 'path': [{'lat': float(point.latitude), 'lng': float(point.longitude)} for point in path]},
+            return Response({"full_path": get_polyline_from_path(path),
+                             'path': [{'lat': float(point.latitude), 'lng': float(point.longitude)} for point in path]},
                             status=status.HTTP_200_OK)
         if request.user.passengers.all().count():
             path = request.user.passengers.first().path
-            return Response({"full_path": get_polyline_from_path(path), 'path': [{'lat': float(point.latitude), 'lng': float(point.longitude)} for point in path]},
+            return Response({"full_path": get_polyline_from_path(path),
+                             'path': [{'lat': float(point.latitude), 'lng': float(point.longitude)} for point in path]},
                             status=status.HTTP_200_OK)
         return Response({"poly_line": None}, status=status.HTTP_200_OK)
 

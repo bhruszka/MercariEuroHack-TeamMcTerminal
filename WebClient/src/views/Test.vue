@@ -1,7 +1,7 @@
 <template>
     <GmapMap :center="center" :zoom="12" class="poly-map" :options="options">
         <div v-for="(element, index) in data" :key="index">
-            <gmap-marker v-for="(m, index2) in element.path" :position="m" :key="index2"></gmap-marker>
+            <gmap-marker v-for="(m, index2) in element.path" :position="m" :key="index2" :icon="'https://carpooling.com.pl:4242/'+element.users[index2].avatar"></gmap-marker>
             <gmap-polyline v-if="element.full_path != null && element.full_path.length > 0" :path="element.full_path" ref="polyline" :options="{strokeColor: colorArray[index]}">
             </gmap-polyline>
         </div>
