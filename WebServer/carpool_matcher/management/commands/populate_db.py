@@ -3,9 +3,9 @@ import logging
 from django.contrib.auth import get_user_model
 from django.core.management.base import BaseCommand, CommandError
 
-from matcher.factories import UserFactory
-from matcher.models import Location, Distance, DistanceCache, Passenger, Driver, Route
-from matcher.utils import modified_dijkstra_search
+from carpool_matcher.factories import UserFactory
+from carpool_matcher.models import Location, Distance, DistanceCache, Passenger, Driver, Route
+from carpool_matcher.utils import modified_dijkstra_search
 import random
 
 logger = logging.getLogger(__name__)

@@ -34,7 +34,7 @@ ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     'core',
-    'matcher',
+    'carpool_matcher',
     'corsheaders',
     'django_extensions',
     'django_celery_results',
@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_swagger',
     'factory',
+    'PIL'
 ]
 
 MIDDLEWARE = [
@@ -55,10 +56,11 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'api.middleware.AuthMiddleware',
 ]
 
 ROOT_URLCONF = 'carpooling.urls'
@@ -169,7 +171,7 @@ LOGGING = {
         },
     },
     'loggers': {
-        'matcher': APP_LOG_SETUP,
+        'carpool_matcher': APP_LOG_SETUP,
         'api': APP_LOG_SETUP,
         'carpooling': APP_LOG_SETUP,
         'core': APP_LOG_SETUP,
@@ -179,6 +181,12 @@ LOGGING = {
 CORS_ORIGIN_ALLOW_ALL = True
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
+
+APPEND_SLASH = False
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 
 try:
     from local_settings import *
