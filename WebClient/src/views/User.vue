@@ -44,7 +44,7 @@
           <v-btn @click.native="addRoute = true">Add Route</v-btn>
         </v-flex>
         <v-flex xs6>
-          <PolyMap :path="path"/>
+          <PolyMap :path="path" :full_path="full_path"/>
         </v-flex>
       </div>
     </div>
@@ -80,7 +80,8 @@ export default {
       route: null,
       addRoute: false,
       existingRoutes: [],
-      path: null
+      path: null,
+      full_path: null
       //
     };
   },
@@ -186,11 +187,12 @@ export default {
       var self = this;
       axios
         .get(
-          `https://carpooling.com.pl:4242/api/routes/?userId=${
+          `https://carpooling.com.pl:4242/api/routes/path/?userId=${
             this.user.userId
           }&token=${this.user.token}`
         )
         .then(function(response) {
+          self.full_path = response.data.full_path;
           self.path = response.data.path;
           console.log(response);
           self.addRoute = false;
