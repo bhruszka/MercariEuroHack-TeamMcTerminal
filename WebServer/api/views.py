@@ -243,8 +243,8 @@ class RouteViewSet(ModelViewSet):
 
     @list_route(methods=['GET'])
     def clear_my_path(self, request, *args, **kwargs):
-        request.user.drivers.delete()
-        request.user.passengers.delete()
+        request.user.drivers.all().delete()
+        request.user.passengers.all().delete()
         return Response(status=status.HTTP_200_OK)
 
     @list_route(methods=['GET'])
