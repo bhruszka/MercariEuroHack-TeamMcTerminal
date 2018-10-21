@@ -208,7 +208,9 @@ class RouteViewSet(ModelViewSet):
 
     @list_route(methods=['GET'])
     def all_routes(self, request, *args, **kwargs):
-        queryset = Route.objects.all()
+        queryset = Route.objects.all().annotate(
+            type=Case(When(Q(driver__isnull=False), then=Value('driver')), output_field=CharField(),
+                      default=Value('passenger'))).filter(type='driver')
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
 
