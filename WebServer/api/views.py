@@ -26,7 +26,7 @@ from rest_framework.viewsets import ModelViewSet
 
 from api.serializers import LoginSerializer, CreateUserSerializer, UserSerializer, FacebokLoginSerializer, \
     RouteSerializer
-from carpool_matcher.models import Route
+from carpool_matcher.models import Route, Driver
 from carpool_matcher.utils import get_polyline_from_path
 
 app_name = 'api'
@@ -219,14 +219,28 @@ class RouteViewSet(ModelViewSet):
         return Response(serializer.data)
 
     @list_route(methods=['GET'])
+    def all_routes_path(self, request, *args, **kwargs):
+        drivers = Driver.objects.all()
+
+        result = []
+
+        for driver in drivers:
+            result.append({
+                'full_path': get_polyline_from_path(driver.path),
+                'path': get_polyline_from_path([{'lat': point.latitude, 'lng': point.longitude} for point in driver.path]),
+            })
+
+        return Response(result, status=status.HTTP_200_OK)
+
+    @list_route(methods=['GET'])
     def path(self, request, *args, **kwargs):
         if request.user.drivers.all().count():
             path = request.user.drivers.first().path
-            return Response({"full_path": get_polyline_from_path(path), 'path': [{'lat': point.latitude, 'lng': point.longitude} for point in path]},
+            return Response({"full_path": get_polyline_from_path(path), 'path': [{'lat': float(point.latitude), 'lng': float(point.longitude)} for point in path]},
                             status=status.HTTP_200_OK)
         if request.user.passengers.all().count():
             path = request.user.passengers.first().path
-            return Response({"full_path": get_polyline_from_path(path), 'path': [{'lat': point.latitude, 'lng': point.longitude} for point in path]},
+            return Response({"full_path": get_polyline_from_path(path), 'path': [{'lat': float(point.latitude), 'lng': float(point.longitude)} for point in path]},
                             status=status.HTTP_200_OK)
         return Response({"poly_line": None}, status=status.HTTP_200_OK)
 
