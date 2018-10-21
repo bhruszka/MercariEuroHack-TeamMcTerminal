@@ -1,66 +1,6 @@
 <template>
-  <v-app>
-    <v-toolbar height="64px">
-      <v-toolbar-title class="headline text-uppercase">
-        <span class="font-weight-light">CARPOOL APP</span>
-      </v-toolbar-title>
-      <v-spacer></v-spacer>
-      <v-btn v-if="user != null" @click.native="facebookLogout"> Log out </v-btn>
-      <span v-else>
-        User: {{user}}
-      </span>
-    </v-toolbar>
-    <v-container>
-      <v-layout row wrap d-flex v-if="user == null">
-        <v-flex xs12>
-          <v-card>
-            <!-- <img src="./assets/background.jpg" style="width: 100%;" /> -->
-            <v-card-title primary-title>
-              <div class="headline">To start carpooling sign in with Facebook</div>
-            </v-card-title>
-            <v-card-actions>
-              <v-btn :disabled="!facebookInit" @click.native="facebookLogin"> Sign in with Facebook </v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-flex>
-      </v-layout>
-      <div v-else>
-        <v-layout row wrap d-flex v-else>
-          <SelectRole v-if="role == null" v-on:set-role="role = $event" />
-          <div v-if="route == null">
-            <DriverForm v-if="role == 'driver'" @cancel="role = null" @submit="route = $event" />
-            <PassengerForm v-if="role == 'passenger'" @cancel="role = null" @submit="route = $event" />
-          </div>
-          <div v-else>
-            <v-btn @click.native="submitRoute">Submit Route</v-btn>
-          </div>
-        </v-layout>
-        <v-layout row wrap d-flex>
-          <v-flex xs12 v-if="user == null">
-            <v-card>
-              <!-- <img src="./assets/background.jpg" style="width: 100%;" /> -->
-
-              <v-card-title primary-title>
-                <div class="headline">To start carpooling sign in with Facebook</div>
-              </v-card-title>
-              <v-card-actions>
-                <v-btn :disabled="!facebookInit" @click.native="facebookLogin"> Sign in with Facebook </v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-flex>
-          <div v-else>
-            <SelectRole v-if="role == null" v-on:set-role="role = $event" />
-            <div v-if="route == null">
-              <DriverForm v-if="role == 'driver'" @cancel="role = null" @submit="route = $event" />
-              <PassengerForm v-if="role == 'passenger'" @cancel="role = null" @submit="route = $event" />
-            </div>
-            <div v-else>
-              <v-btn @click.native="submitRoute">Submit Route</v-btn>
-            </div>
-          </div>
-        </v-layout>
-      </div>
-    </v-container>
+  <v-app dark>
+     <router-view></router-view>
   </v-app>
 </template>
 
@@ -93,31 +33,6 @@ export default {
     };
   },
   created() {
-    var self = this;
-
-    window.fbAsyncInit = function() {
-      FB.init({
-        appId: "162998601309144",
-        autoLogAppEvents: true,
-        xfbml: true,
-        version: "v3.1"
-      });
-      FB.getLoginStatus(function(response) {
-        self.authStatusChangeCallback(response);
-      });
-    };
-
-    (function(d, s, id) {
-      var js,
-        fjs = d.getElementsByTagName(s)[0];
-      if (d.getElementById(id)) {
-        return;
-      }
-      js = d.createElement(s);
-      js.id = id;
-      js.src = "https://connect.facebook.net/en_US/sdk.js";
-      fjs.parentNode.insertBefore(js, fjs);
-    })(document, "script", "facebook-jssdk");
   },
   methods: {
     authStatusChangeCallback(response) {

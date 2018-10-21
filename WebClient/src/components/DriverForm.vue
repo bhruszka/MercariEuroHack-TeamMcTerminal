@@ -1,9 +1,9 @@
 <template>
   <v-flex xs12>
-    <h1>Driver</h1>
-    <Map v-on:set-start-point="setStartpoint($event)" v-on:set-destination="setDestination($event)" />
-    <v-btn @click.native="submit">Submit</v-btn>
-    <v-btn @click.native="$emit('cancel')">Cancel</v-btn>
+    <v-alert :value="error_text != null" type="error">
+      {{error_text}}
+    </v-alert>
+    <Map label="Drivers route:" v-on:set-start-point="setStartpoint($event)" v-on:set-destination="setDestination($event)" @submit="submit" @cancel="$emit('cancel')" />
   </v-flex>
 </template>
 <script>
