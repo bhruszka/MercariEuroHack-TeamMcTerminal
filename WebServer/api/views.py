@@ -10,6 +10,7 @@ from django.conf import settings
 from django.contrib.auth import login, logout, get_user_model
 from django.core import files
 from django.db.models import Case, When, Value, CharField, Q
+from django.forms import model_to_dict
 from django.http import HttpResponse, HttpRequest
 from django.shortcuts import render
 
@@ -182,8 +183,12 @@ class RouteViewSetNoAuth(CreateAPIView):
 
         for driver in drivers:
             result.append({
+                'user': {
+                    'email': driver.user.email,
+                    'name': "%s %s" % (driver.user.first_name, driver.user.last_name)
+                },
                 'full_path': get_polyline_from_path(driver.path),
-                'path': [{'lat': point.latitude, 'lng': point.longitude} for point in driver.path],
+                'path': [{'lat': float(point.latitude), 'lng': float(point.longitude)} for point in driver.path],
             })
 
         return Response(result, status=status.HTTP_200_OK)
