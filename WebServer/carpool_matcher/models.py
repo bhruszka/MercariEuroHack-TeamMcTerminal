@@ -69,11 +69,11 @@ class DistanceCache:
         raise DistanceCache.CacheMissException()
 
 
-# @receiver(post_save, sender=Location)
-# def location_saved(sender, instance, created, **kwargs):
-#     if created:
-#         this is a newly created location
-#         calculate_distances.delay(instance.pk)
+@receiver(post_save, sender=Location)
+def location_saved(sender, instance, created, **kwargs):
+    if created:
+        # this is a newly created location
+        calculate_distances.delay(instance.pk)
 
 
 class Distance(CommonModel):

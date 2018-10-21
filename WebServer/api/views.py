@@ -146,6 +146,10 @@ class UserViewSet(ModelViewSet):
     def get_object(self):
         return self.get_queryset().get(id=self.request.user.id)
 
+    @list_route(methods=['GET'])
+    def your_profile(self, request, *args, **kwargs):
+        return Response(self.serializer_class(request.user).data)
+
 
 # class RouteFilter(filters.FilterSet):
 #     type = filters.CharFilter(name='type', method='filter_type')
