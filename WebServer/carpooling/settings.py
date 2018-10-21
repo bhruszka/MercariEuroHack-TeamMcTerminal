@@ -181,8 +181,6 @@ CORS_ORIGIN_ALLOW_ALL = True
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
 
-APPEND_SLASH = False
-
 try:
     from local_settings import *
 except ImportError:
