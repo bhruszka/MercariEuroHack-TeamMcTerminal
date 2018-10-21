@@ -170,6 +170,24 @@ class UserViewSet(ModelViewSet):
 #         return qs.exclude(**{lookup_expr: self.request.user})
 
 
+class RouteViewSetNoAuth(CreateAPIView):
+    permission_classes = (AllowAny,)
+    serializer_class = RouteSerializer
+    pagination_class = None
+
+    def get(self, request, *args, **kwargs):
+        drivers = Driver.objects.all()
+
+        result = []
+
+        for driver in drivers:
+            result.append({
+                'full_path': get_polyline_from_path(driver.path),
+                'path': [{'lat': point.latitude, 'lng': point.longitude} for point in driver.path],
+            })
+
+        return Response(result, status=status.HTTP_200_OK)
+
 class RouteViewSet(ModelViewSet):
     """
     type - either 'driver' or 'passenger' for query and for post
@@ -217,22 +235,6 @@ class RouteViewSet(ModelViewSet):
                       default=Value('passenger'))).filter(type='driver')
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
-
-    @permission_classes((AllowAny,))
-    @authentication_classes((AllowAny,))
-    @list_route(methods=['GET'])
-    def all_routes_path(self, request, *args, **kwargs):
-        drivers = Driver.objects.all()
-
-        result = []
-
-        for driver in drivers:
-            result.append({
-                'full_path': get_polyline_from_path(driver.path),
-                'path': get_polyline_from_path([{'lat': point.latitude, 'lng': point.longitude} for point in driver.path]),
-            })
-
-        return Response(result, status=status.HTTP_200_OK)
 
     @list_route(methods=['GET'])
     def path(self, request, *args, **kwargs):
