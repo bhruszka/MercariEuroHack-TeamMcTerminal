@@ -15,6 +15,7 @@ class CustomUser (AbstractUser):
     USERNAME_FIELD = 'username'
     facebook_id = models.IntegerField( null=True, blank=True)
     facebook_token = models.CharField(max_length=50, null=True, blank=True)
+    avatar = models.ImageField('image', null=True, blank=True, upload_to='img')
 
     class Meta:
         verbose_name = 'user'

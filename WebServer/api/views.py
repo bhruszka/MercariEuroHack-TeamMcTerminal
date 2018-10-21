@@ -1,8 +1,14 @@
 import json
+import tempfile
+import uuid
+
+from io import StringIO, BytesIO
+from uuid import uuid4
 
 import requests
 from django.conf import settings
 from django.contrib.auth import login, logout, get_user_model
+from django.core import files
 from django.db.models import Case, When, Value, CharField, Q
 from django.http import HttpResponse, HttpRequest
 from django.shortcuts import render
@@ -79,6 +85,35 @@ class LoginFacebookView(CreateAPIView):
                                                        email=response['email'],
                                                        username=response['email'],
                                                        facebook_id=serializer.validated_data['userId'])
+                image_url = 'https://graph.facebook.com/{}/picture?access_token={}&client_id={}&client_secret={}&grant_type=client_credentialsŁ'.format(
+                    serializer.validated_data['userId'],
+                    serializer.validated_data['token'],
+                    settings.SOCIAL_AUTH_FACEBOOK_KEY,
+                    settings.SOCIAL_AUTH_FACEBOOK_SECRET
+                )
+
+                request = requests.get(image_url, stream=True)
+
+                # Get the filename from the url, used for saving later
+                file_name = "{}.{}".format(uuid.uuid4(), request.headers.get('content-type').split('/')[1])
+
+                # Create a temporary file
+                lf = tempfile.NamedTemporaryFile()
+
+                # Read the streamed image in sections
+                for block in request.iter_content(1024 * 8):
+
+                    # If no more file then stop
+                    if not block:
+                        break
+
+                    # Write image block to temporary file
+                    lf.write(block)
+
+                # Save the temporary image to the model#
+                # This saves the model so be sure that is it valid
+                user.avatar.save(file_name, files.File(lf))
+                user.save()
             user.facebook_token = serializer.validated_data['token']
             user.save()
             return Response(status=status.HTTP_200_OK)
@@ -170,6 +205,13 @@ class RouteViewSet(ModelViewSet):
         queryset = self.get_queryset().first()
         serializer = self.get_serializer(queryset)
         return Response(serializer.data)
+
+    @list_route(methods=['GET'])
+    def all_routes(self, request, *args, **kwargs):
+        queryset = Route.objects.all()
+        serializer = self.get_serializer(queryset)
+        return Response(serializer.data)
+
 
     @list_route(methods=['GET'])
     def path(self, request, *args, **kwargs):

@@ -62,6 +62,7 @@ class UserSerializer(serializers.ModelSerializer):
         # TODO: Password validation
         return attrs
 
+
 class LocationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Location
