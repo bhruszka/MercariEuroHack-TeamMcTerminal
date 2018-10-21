@@ -105,12 +105,18 @@ class RouteSerializer(serializers.ModelSerializer):
         if validated_data.get('type'):
             request = self.context['request']
             if validated_data['type'] == 'driver':
-                driver = Driver(user=request.user)
-                driver.save()
+                try:
+                    driver = Driver.objects.get(user=request.user)
+                except Driver.DoesNotExist:
+                    driver = Driver(user=request.user)
+                    driver.save()
                 validated_data['driver'] = driver
             elif validated_data['type'] == 'passenger':
-                passenger = Passenger(user=request.user)
-                passenger.save()
+                try:
+                    passenger = Passenger.objects.get(user=request.user)
+                except Passenger.DoesNotExist:
+                    passenger = Passenger(user=request.user)
+                    passenger.save()
                 validated_data['passenger'] = passenger
             del validated_data['type']
         return super().create(validated_data)

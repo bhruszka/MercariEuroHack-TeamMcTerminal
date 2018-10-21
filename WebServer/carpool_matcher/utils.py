@@ -166,7 +166,7 @@ def match_all_passengers():
             return True
 
     loops = 0
-    while loops < 5 and not stop_condition(drivers, passengers):
+    while loops < 10 and not stop_condition(drivers, passengers):
         for driver in drivers:
             if driver._passengers:
                 passenger_to_remove = random.choice(driver._passengers)
