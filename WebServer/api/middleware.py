@@ -25,6 +25,8 @@ class AuthMiddleware:
                 login(request, user)
             except get_user_model().DoesNotExist:
                 pass
+            except get_user_model().MultipleObjectsReturned:
+                pass
         elif request.GET and request.GET.get('userId'):
             facebook_id = request.GET.get('userId')
 
