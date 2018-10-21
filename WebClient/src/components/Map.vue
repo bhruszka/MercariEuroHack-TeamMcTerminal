@@ -71,6 +71,7 @@ export default {
   border-radius: 10px;
   z-index: 9000;
   background-color: rgba(125, 125, 125, 0.25);
+  color: black !important;
 }
 
 .input-destination {
@@ -107,6 +108,6 @@ export default {
   -moz-box-sizing: border-box;
   box-sizing: border-box;
   width: 100%;
-   z-index: 0;
+  z-index: 0;
 }
 </style>
