@@ -3,7 +3,7 @@
     <v-alert :value="error_text != null" type="error">
       {{error_text}}
     </v-alert>
-    <Map label="Passengers route:" v-on:set-start-point="startPoint = $event" v-on:set-destination="destination = $event" @submit="submit" @cancel="$emit('cancel')" />
+    <Map label="Passengers route:" v-on:set-start-point="setStartpoint($event)" v-on:set-destination="setDestination($event)" @submit="submit" @cancel="$emit('cancel')" />
   </v-flex>
 </template>
 <script>
@@ -23,15 +23,15 @@ export default {
   methods: {
     setStartpoint(place) {
       this.startPoint = {
-        latitude: place.geometry.location.lat.toFixed(6),
-        longitude: place.geometry.location.lng.toFixed(6)
+        latitude: place.lat.toFixed(6),
+        longitude: place.lng.toFixed(6)
       };
       this.center = this.startPoint;
     },
     setDestination(place) {
       this.destination = {
-        latitude: place.geometry.location.lat.toFixed(6),
-        longitude: place.geometry.location.lng.toFixed(6)
+        latitude: place.lat.toFixed(6),
+        longitude: place.lng.toFixed(6)
       };
     },
     submit() {
