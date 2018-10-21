@@ -18,7 +18,7 @@ from django.shortcuts import render
 
 # Login ApiView
 from rest_framework import status
-from rest_framework.decorators import list_route, permission_classes
+from rest_framework.decorators import list_route, permission_classes, authentication_classes
 from rest_framework.generics import CreateAPIView, RetrieveAPIView
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
@@ -219,6 +219,7 @@ class RouteViewSet(ModelViewSet):
         return Response(serializer.data)
 
     @permission_classes((AllowAny,))
+    @authentication_classes()
     @list_route(methods=['GET'])
     def all_routes_path(self, request, *args, **kwargs):
         drivers = Driver.objects.all()
