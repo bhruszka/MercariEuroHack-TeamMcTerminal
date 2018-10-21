@@ -142,7 +142,7 @@ class UserViewSet(ModelViewSet):
     serializer_class = UserSerializer
 
     def get_queryset(self):
-        return get_user_model().objects.filter(id=self.request.user.id)
+        return get_user_model().objects.all()
 
     def get_object(self):
         return self.get_queryset().get(id=self.request.user.id)

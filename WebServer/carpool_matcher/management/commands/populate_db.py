@@ -1,6 +1,7 @@
 import logging
 
 from django.contrib.auth import get_user_model
+from django.core.files import File
 from django.core.management.base import BaseCommand, CommandError
 
 from carpool_matcher.factories import UserFactory
@@ -20,10 +21,33 @@ class Command(BaseCommand):
         super(Command, self).__init__(*args, **kwargs)
 
     def _make_users(self, options):
-        users = UserFactory.create_batch(size=23)
+        avatars = [
+            '5cvJHVrz.jpg',
+            '21.jpg',
+            'AEF44435-B547-4B84-A2AE-887DFAEE6DDF-200w.jpeg',
+            'EBYH22-K.jpg',
+            'female-14.jpeg',
+            'female-59.jpg',
+            'male-47.jpg',
+            'MV5BMDc2M2NkMTctNmQ0MS00MjQxLWFkMGItNGY1Y2Y3NzYzZjg1XkEyXkFqcGdeQXVyNjAzMTgxNjY@._V1_UY256_CR74,0,172,256_AL_.jpg',
+            'MV5BMjE5ODk2NTI2Nl5BMl5BanBnXkFtZTgwNzIyMDA4MTE@._V1_UY256_CR6,0,172,256_AL_.jpg',
+            'noplz47r59v1uxvyg8ku.png',
+            'oedmUmVc.jpg',
+            'pexels-photo-247917.jpeg',
+            'pexels-photo-274595.jpeg',
+            'photo-1463453091185-61582044d556.jpg',
+            'photo-1502980426475-b83966705988.jpg',
+            'rSuiu_Hr.jpg'
+        ]
+
+        users = UserFactory.create_batch(size=12)
         for user in users:
             user.set_password('test')
+            image_name = avatars.pop()
+            reopen = open("media/faces/{}".format(image_name), 'rb')
+            file = File(reopen)
             user.save()
+            user.avatar.save(image_name, file, save=True)
 
         self.users = users
 
