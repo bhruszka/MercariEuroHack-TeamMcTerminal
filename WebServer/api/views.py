@@ -209,7 +209,7 @@ class RouteViewSet(ModelViewSet):
     @list_route(methods=['GET'])
     def all_routes(self, request, *args, **kwargs):
         queryset = Route.objects.all()
-        serializer = self.get_serializer(queryset)
+        serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
 
 
