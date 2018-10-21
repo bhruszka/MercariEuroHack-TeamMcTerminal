@@ -1,3 +1,5 @@
+import logging
+
 from googlemaps.convert import decode_polyline
 from googlemaps.directions import directions
 import googlemaps
@@ -94,6 +96,9 @@ MAX_VALUE = 9999999999
 
 
 def match_all_passengers():
+    logger = logging.getLogger(__name__)
+    logger.info('START passenger matching.')
+
     if not Location.all_distances_calculated:
         raise CommandError('Not all distances calculated.')
 
@@ -107,6 +112,8 @@ def match_all_passengers():
     extramileage = {}
 
     # start PHASE 1
+
+    logger.info('START Phase 1')
 
     for driver in drivers:
         route = driver.routes.first()
@@ -162,6 +169,8 @@ def match_all_passengers():
             unassigned_passengers.append(passenger)
 
     # start PHASE 2
+    logger.info('START Phase 2')
+
     def stop_condition(_drivers, _passengers):
         for _driver in _drivers:
             if not _driver._passengers:
@@ -170,7 +179,9 @@ def match_all_passengers():
             return True
 
     loops = 0
-    while loops < 10 and not stop_condition(drivers, passengers):
+    while loops < 5 and not stop_condition(drivers, passengers):
+        logger.info('Phase 2 loop: {}'.format(loops))
+
         for driver in drivers:
             if driver._passengers:
                 passenger_to_remove = random.choice(driver._passengers)
