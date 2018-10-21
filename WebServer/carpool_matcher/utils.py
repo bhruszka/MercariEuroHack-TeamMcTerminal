@@ -179,7 +179,8 @@ def match_all_passengers():
             return True
 
     loops = 0
-    while loops < 5 and not stop_condition(drivers, passengers):
+    while loops < 10 and not stop_condition(drivers, passengers):
+        loops += 1
         logger.info('Phase 2 loop: {}'.format(loops))
 
         for driver in drivers:
