@@ -6,16 +6,17 @@ Our idea is to create a carpooling application that automatically matches people
 ## Technology stack:
 
 ### Backend:
-- Python3 - Django with Graphene django and Celery distributed task queue
-- Docker
-- Postgresql
+- Python3 - Django with Django rest framework and Celery distributed task queue
+- Redis
+- Sqlite
+- Apache
 
 ### Web app:
 - Vuejs with Vuetify component library
-- Apollo
-- Leaflet map library with mapbox tile layer
+- Axios
+- Google maps
 
-# Solution:
+# Solutions screenshots:
 
 ## Initial slogan idea:
 ![Alt text](Carpooling-Images/betterslogan.png?raw=true "Better Slogan")
