@@ -1,5 +1,7 @@
 # Mercari Euro Hack - Team McTerminal
 
+All api keys are not valid.
+
 ## Idea:
 Our idea is to create a carpooling application that automatically matches people with optimal ridesharing opportunity.
 
