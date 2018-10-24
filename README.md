@@ -18,14 +18,11 @@ Our idea is to create a carpooling application that automatically matches people
 
 # Solutions screenshots:
 
-## Initial slogan idea:
-![Alt text](Carpooling-Images/betterslogan.png?raw=true "Better Slogan")
+## Landing page:
+![Alt text](Carpooling-Images/frontpage.png?raw=true "Landing Page")
 
-## Actual slogan:
-![Alt text](Carpooling-Images/frontpage.png?raw=true "Actual Slogan")
-
-## User page:
-![Alt text](Carpooling-Images/mainpage.png?raw=true "User Page")
+## User panel:
+![Alt text](Carpooling-Images/mainpage.png?raw=true "User Panel")
 
 ## Choose between being driver and passanger:
 ![Alt text](Carpooling-Images/driver_passanger.png?raw=true "Choose between being driver and passanger")
